@@ -1,5 +1,4 @@
-# Run clang-format
-name: Clang-format
+name: clang-format check
 
 on: push
 
@@ -8,9 +7,5 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Run clang-format on src/
-      uses: HorstBaerbel/action-clang-format@1.5
-      with:
-        scandir: '.'
-        style: 'file'
+    - name: clang-format check
+      uses: jidicula/clang-format-action@v4.0.0
