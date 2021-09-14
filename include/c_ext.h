@@ -76,6 +76,10 @@ namespace impl {
 }
 
 template<typename... Args>
+void print(Args&&... args) {
+    impl::print(std::forward<Args>(args)...);
+}
+template<typename... Args>
 void print_error(Args&&... args) {
     impl::write_raw_ign_err("(error) ", stdout);
     impl::print(std::forward<Args>(args)...);
