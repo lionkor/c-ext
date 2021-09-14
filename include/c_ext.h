@@ -86,7 +86,14 @@ void print_error(Args&&... args) {
 }
 template<typename... Args>
 void print_debug(Args&&... args) {
+#if !defined(NDEBUG)
     impl::write_raw_ign_err("(debug) ", stdout);
+    impl::print(std::forward<Args>(args)...);
+#endif // not defined NDEBUG
+}
+template<typename... Args>
+void print_warning(Args&&... args) {
+    impl::write_raw_ign_err("(warning) ", stdout);
     impl::print(std::forward<Args>(args)...);
 }
 
