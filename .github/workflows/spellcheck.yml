@@ -1,9 +1,7 @@
 name: spellcheck
 
-on:
-  push:
-    branches-ignore:
-      - master
+on: push
+
 jobs:
   spellcheck:
     name: typo ci
