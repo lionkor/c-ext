@@ -20,8 +20,3 @@ jobs:
           max_ctu_depth: 4
           platform: ${{ matrix.platform }}
           std: c++20
-
-      - name: publish report    
-        uses: mikeal/publish-to-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
