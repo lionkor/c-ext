@@ -1,3 +1,6 @@
+name: cppcheck
+on: push
+
 jobs:
   cppcheck:
     name: run-cppcheck
