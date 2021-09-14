@@ -1,0 +1,11 @@
+jobs:
+  cppcheck:
+    name: run-cppcheck
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: run cppcheck
+      uses: Bedzior/cppcheck-action@v1.0
+      with:
+        enabled checks: all
+        enable inconclusive: false
