@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        platform: [unix64, win64, unix32, win32]
+        platform: [unix64, win64, unix32]
     steps:
       - uses: actions/checkout@v2
       - name: cppcheck
