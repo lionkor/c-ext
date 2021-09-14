@@ -6,17 +6,23 @@
 #include <filesystem>
 #include <stdexcept>
 
+static std::string quoted(const std::string& str) {
+    return "\"" + str + "\"";
+}
+
 c::err<c::file> c::file::open(const std::string& filename, mode mode, bool binary) {
     bool exists = std::filesystem::exists(filename);
     std::string c_mode;
     switch (mode) {
     case c::file::mode::READ:
-        return err<file>::make_error("file does not exist, cannot open for read" + filename);
+        if (!exists) {
+            return err<file>::make_error("file does not exist, cannot open for read: " + quoted(filename));
+        }
         c_mode = "r";
         break;
     case c::file::mode::READ_WRITE:
         if (!exists) {
-            throw exception("file does not exist, cannot open for read & write", filename);
+            return err<file>::make_error("file does not exist, cannot open for read: " + quoted(filename));
         }
         c_mode = "r+";
         break;
@@ -41,7 +47,7 @@ c::err<c::file> c::file::open(const std::string& filename, mode mode, bool binar
     file.m_handle = fopen(filename.c_str(), c_mode.c_str());
     if (!file.m_handle) {
         auto str = std::string(std::strerror(errno));
-        return err<c::file>::make_error("fopen failed: " + str);
+        return err<c::file>::make_error("fopen " + quoted(filename) + " failed: " + str);
     }
     return err<c::file>::make_value(file);
 }

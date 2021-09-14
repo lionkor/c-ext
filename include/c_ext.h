@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <exception>
 #include <filesystem>
+#include <optional>
 #include <stdexcept>
 #include <string_view>
 #include <utility>
@@ -20,40 +21,44 @@ private:
 
 template<class T>
 struct err final {
+    err() { }
     static err make_error(const std::string& e) {
         err res;
-        res.m_value.error = e;
+        res.m_error = e;
         res.m_ok = false;
         return res;
     }
     static err make_value(const T& v) {
         err res;
-        res.m_value.real_value = v;
+        res.m_maybe_value = v;
         res.m_ok = true;
         return res;
     }
     operator bool() const { return m_ok; }
-    T&& get() const {
+    const T& get() const {
         if (!m_ok) {
             throw exception("can't get() value on error");
         }
-        return std::move(m_value.real_value);
+        return m_maybe_value.value();
+    }
+    T& get() {
+        if (!m_ok) {
+            throw exception("can't get() value on error");
+        }
+        return m_maybe_value.value();
     }
     bool ok() const { return m_ok; }
     const std::string& message() const {
         if (m_ok) {
             throw exception("can't get message() on non-error");
         }
-        return m_value.error;
+        return m_error;
     }
 
 private:
     bool m_ok;
-    union maybe {
-        const std::string error;
-        T real_value;
-        ~maybe() { }
-    } m_value;
+    std::string m_error;
+    std::optional<T> m_maybe_value;
 };
 
 namespace impl {
@@ -93,10 +98,6 @@ struct file {
         TRUNCATE_READ_WRITE,
         APPEND_WRITE,
         APPEND_READ_WRITE
-    };
-
-    struct exception : c::exception {
-        using c::exception::exception;
     };
 
     static err<file> open(const std::string& filename, mode mode, bool binary = false);
