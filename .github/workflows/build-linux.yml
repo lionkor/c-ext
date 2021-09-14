@@ -11,7 +11,7 @@ jobs:
     - name: install build tools
       run: |
         apt-get update -y
-        apt-get install cmake make g++-10
+        apt-get install -y cmake make g++-10
     - name: run cmake
       run: |
         cmake -DCMAKE_BUILD_TYPE=Release -S . -B bin
