@@ -1,0 +1,16 @@
+# Run clang-format
+name: Clang-format
+
+on: push
+
+jobs:
+  checkout-and-check-formatting:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run clang-format on src/
+      uses: HorstBaerbel/action-clang-format@1.5
+      with:
+        scandir: '.'
+        style: 'file'
